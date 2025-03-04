@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Therapy - Login</title>
+    <link rel="stylesheet" href="style2.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <script>
+        // When page loads, scroll to top
+        window.onload = function() {
+            window.scrollTo(0, 0);
+        }
+        
+        // Also reset scroll position on page refresh
+        if (history.scrollRestoration) {
+            history.scrollRestoration = 'manual';
+        }
+    </script>
+</head>
+<body>
+    <div class="login-container">
+        <!-- Left side - Login form -->
+        <div class="login-form-container">
+            <div class="user-type-selector">
+                <button id="clientBtn" class="user-type-btn active">Client</button>
+                <button id="therapistBtn" class="user-type-btn">Therapist</button>
+            </div>
+            
+            <form id="loginForm">
+                <h1>Welcome Back</h1>
+                <p class="login-subtitle" id="loginSubtitle">Sign in as Client</p>
+                
+                <div class="social-login">
+                    <button type="button" class="google-btn"><i class='bx bxl-google'></i> Continue with Google</button>
+                    <button type="button" class="apple-btn"><i class='bx bxl-apple'></i> Continue with Apple ID</button>
+                </div>
+                
+                <div class="separator">
+                    <span>or</span>
+                </div>
+                
+                <div class="form-input">
+                    <input type="text" id="username" placeholder="Username or Email" required>
+                    <i class='bx bx-user'></i>
+                </div>
+                
+                <div class="form-input password-container">
+                    <input type="password" id="password" placeholder="Password" required>
+                    <button type="button" class="show-password-btn" id="togglePassword">👁️</button>
+                    <div id="passwordError" class="error-message">Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.</div>
+                </div>
+                
+                <div class="remember-forgot">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="btn">Sign In</button>
+                
+                <div class="register-link">
+                    <p>Don't have an account? <a href='#' id="showRegisterForm">Register</a></p>
+                </div>
+            </form>
+            
+            <!-- Registration Form (initially hidden) -->
+            <form id="registerForm" style="display:none;">
+                <h1>Create Account</h1>
+                <p class="login-subtitle" id="registerSubtitle">Register as Client</p>
+                
+                <div class="form-input">
+                    <input type="text" id="regUsername" placeholder="Username" required>
+                    <i class='bx bx-user'></i>
+                </div>
+                
+                <div class="form-input">
+                    <input type="email" id="regEmail" placeholder="Email" required>
+                    <i class='bx bx-envelope'></i>
+                </div>
+                
+                <div class="form-input password-container">
+                    <input type="password" id="regPassword" placeholder="Password" required>
+                    <button type="button" class="show-password-btn" id="toggleRegPassword"></button>
+                    <div id="regPasswordError" class="error-message">Password must be at least 8 characters long and contain at least one uppercase letter, one number, and one special character.</div>
+                    <div id="passwordSuccess" class="password-success hidden">Password is strong!</div>
+                </div>
+                
+                <div class="form-input password-container">
+                    <input type="password" id="confirmPassword" placeholder="Confirm Password" required>
+                    <i class='bx bx-check'></i>
+                    <div id="confirmPasswordError" class="error-message">Passwords do not match.</div>
+                </div>
+                
+                <button type="submit" class="btn">Register Now</button>
+                
+                <div class="login-link">
+                    <p>Already have an account? <a href='#' id="showLoginForm">Login</a></p>
+                </div>
+            </form>
+            
+            <div id="loading" class="loading-overlay">
+                <div class="spinner"></div>
+                <p>Processing...</p>
+            </div>
+        </div>
+        
+        <!-- Right side - Image/Content -->
+        <div class="login-content-container">
+            <div class="logo-header">
+                <a href="index.html">
+                    <div class="site-logo">Speech<span>Therapy</span></div>
+                </a>
+            </div>
+            
+            <div class="content-slider">
+                <div class="slide active">
+                    <h2>Welcome to Speech Therapy</h2>
+                    <p>Your journey to better communication starts here</p>
+                    <img src="./Images/speech1.jpeg" alt="Speech Therapy" class="slide-image">
+                </div>
+                <div class="slide">
+                    <h2>Expert Therapists</h2>
+                    <p>Our certified professionals are ready to assist you</p>
+                    <img src="./Images/speech2.jpg" alt="Therapist" class="slide-image">
+                </div>
+                <div class="slide">
+                    <h2>Modern Approach</h2>
+                    <p>Innovative techniques for effective results</p>
+                    <img src="./Images/speech3.jpg" alt="Modern Therapy" class="slide-image">
+                </div>
+            </div>
+            
+            <div class="slide-indicators">
+                <span class="indicator active"></span>
+                <span class="indicator"></span>
+                <span class="indicator"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // User type switching functionality
+            const clientBtn = document.getElementById('clientBtn');
+            const therapistBtn = document.getElementById('therapistBtn');
+            const loginSubtitle = document.getElementById('loginSubtitle');
+            const registerSubtitle = document.getElementById('registerSubtitle');
+            
+            clientBtn.addEventListener('click', function() {
+                clientBtn.classList.add('active');
+                therapistBtn.classList.remove('active');
+                loginSubtitle.textContent = 'Sign in as Client';
+                registerSubtitle.textContent = 'Register as Client';
+            });
+            
+            therapistBtn.addEventListener('click', function() {
+                therapistBtn.classList.add('active');
+                clientBtn.classList.remove('active');
+                loginSubtitle.textContent = 'Sign in as Therapist';
+                registerSubtitle.textContent = 'Register as Therapist';
+            });
+            
+            // Toggle between login and register forms
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const showRegisterForm = document.getElementById('showRegisterForm');
+            const showLoginForm = document.getElementById('showLoginForm');
+            
+            showRegisterForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                loginForm.style.display = 'none';
+                registerForm.style.display = 'block';
+            });
+            
+            showLoginForm.addEventListener('click', function(e) {
+                e.preventDefault();
+                registerForm.style.display = 'none';
+                loginForm.style.display = 'block';
+            });
+            
+            // Password validation functionality
+            const passwordInput = document.getElementById('regPassword');
+            const confirmPasswordInput = document.getElementById('confirmPassword');
+            const passwordError = document.getElementById('regPasswordError');
+            const confirmPasswordError = document.getElementById('confirmPasswordError');
+            const passwordSuccess = document.getElementById('passwordSuccess');
+            const loading = document.getElementById('loading');
+            const togglePasswordBtn = document.getElementById('togglePassword');
+            const toggleRegPasswordBtn = document.getElementById('toggleRegPassword');
+
+            function validatePassword(password) {
+                const minLength = 8;
+                const uppercaseRegExp = /[A-Z]/;
+                const numberRegExp = /[0-9]/;
+                const specialCharRegExp = /[!@#$%^&*(),.?":{}|<>]/;
+
+                return password.length >= minLength &&
+                       uppercaseRegExp.test(password) &&
+                       numberRegExp.test(password) &&
+                       specialCharRegExp.test(password);
+            }
+
+            passwordInput.addEventListener('input', function() {
+                const password = passwordInput.value;
+                const passwordIsValid = validatePassword(password);
+                const showButtonVisible = password.length > 0;
+
+                if (passwordIsValid) {
+                    passwordInput.classList.add('valid');
+                    passwordInput.classList.remove('invalid');
+                    passwordSuccess.classList.add('visible');
+                    passwordSuccess.classList.remove('hidden');
+                } else {
+                    passwordInput.classList.add('invalid');
+                    passwordInput.classList.remove('valid');
+                    passwordSuccess.classList.add('hidden');
+                    passwordSuccess.classList.remove('visible');
+                }
+
+                passwordError.style.display = passwordIsValid ? 'none' : 'block';
+                toggleRegPasswordBtn.classList.toggle('visible', showButtonVisible);
+            });
+
+            confirmPasswordInput.addEventListener('input', function() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                const passwordsMatch = password === confirmPassword;
+                confirmPasswordError.style.display = passwordsMatch ? 'none' : 'block';
+            });
+
+            registerForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+                loading.style.display = 'flex'; // Show loader
+                
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password === "1@Vedant") {
+                    setTimeout(() => {
+                        alert('Special case password accepted. Proceeding with registration.');
+                        loading.style.display = 'none'; // Hide loader
+                    }, 1500);
+                    return; // Handle special case as needed
+                }
+
+                const passwordIsValid = validatePassword(password);
+                const passwordsMatch = password === confirmPassword;
+
+                if (passwordIsValid && passwordsMatch) {
+                    // Simulate API request with timeout
+                    setTimeout(() => {
+                        alert('Registration successful!');
+                        loading.style.display = 'none'; // Hide loader
+                        // Redirect to dashboard or show success message
+                    }, 2000);
+                } else {
+                    loading.style.display = 'none'; // Hide loader if validation fails
+                }
+            });
+
+            loginForm.addEventListener('submit', function(event) {
+                event.preventDefault(); // Prevent form submission
+                loading.style.display = 'flex'; // Show loader
+                
+                // Simulate login process
+                setTimeout(() => {
+                    alert('Login successful!');
+                    loading.style.display = 'none'; // Hide loader
+                    window.location.href = 'index.html'; // Redirect to home page
+                }, 1500);
+            });
+
+            // Password toggle functionality
+            togglePasswordBtn.addEventListener('click', function() {
+                const passwordInput = document.getElementById('password');
+                togglePasswordVisibility(passwordInput, togglePasswordBtn);
+            });
+            
+            toggleRegPasswordBtn.addEventListener('click', function() {
+                const passwordInput = document.getElementById('regPassword');
+                const confirmPasswordInput = document.getElementById('confirmPassword');
+                togglePasswordVisibility(passwordInput, toggleRegPasswordBtn);
+                togglePasswordVisibility(confirmPasswordInput, toggleRegPasswordBtn);
+            });
+            
+            function togglePasswordVisibility(input, button) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    button.textContent = '🔒';
+                } else {
+                    input.type = 'password';
+                    button.textContent = '👁️';
+                }
+            }
+            
+            // Content slider functionality
+            const slides = document.querySelectorAll('.slide');
+            const indicators = document.querySelectorAll('.indicator');
+            let currentSlide = 0;
+            
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach(slide => slide.classList.remove('active'));
+                indicators.forEach(indicator => indicator.classList.remove('active'));
+                
+                // Show the selected slide
+                slides[index].classList.add('active');
+                indicators[index].classList.add('active');
+                currentSlide = index;
+            }
+            
+            // Auto-rotate slides
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                showSlide(currentSlide);
+            }, 5000);
+            
+            // Allow clicking on indicators
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    showSlide(index);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
